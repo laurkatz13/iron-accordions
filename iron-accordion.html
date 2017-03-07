@@ -32,6 +32,21 @@ Example multiple:
       <p>YEAH!!!</p>
     </iron-accordion>
 
+Example with expandable:
+    <iron-accordion expandable=false>
+      <h2 header>This header is disabled</h2>
+      <p>So you can't click and see this paragraph</p>
+      <p>Use a function in place of false to toggle enable/disable</p>
+    </iron-accordion>
+
+
+The following custom properties and mixins are also available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--enabled-header` | Mixin applied to the header when enabled (expandable = true) | `{}`
+`--disabled-header` | Mixin applied to the header when disabled (expandable = false) | `{}`
+
 @demo demo/index.html
 @hero hero.svg
 -->
@@ -49,13 +64,25 @@ Example multiple:
         overflow: hidden;
       }
 
+      #header.disabled-header {
+        cursor: default;
+
+        @apply(--disabled-header);
+      }
+
+      #header.enabled-header{
+        cursor: pointer;
+
+        @apply(--enabled-header);
+      }
+
       #content {
         overflow: hidden;
       }
 
     </style>
 
-    <div id="header">
+    <div id="header" expandable$="{{expandable}}" class$="{{_isExpandable(expandable)}}">
       <content select="[header]"></content>
     </div>
     <iron-collapse id="content" opened="{{opened}}">
@@ -68,6 +95,13 @@ Example multiple:
       is: 'iron-accordion',
 
       properties: {
+          /**
+           * Set expandable to permit taps to open the collapse element. Also sets enabled-header/disabled-header class.
+           */
+          expandable: {
+              type: Boolean,
+              value: true
+          },
         /**
          * Set opened to true to show the collapse element and to false to hide it.
          *
@@ -81,10 +115,9 @@ Example multiple:
         }
       },
 
-        //Temporarily disabling until I have time to get better control around headers
-//      listeners: {
-//        'header.tap': '_onHeaderTap'
-//      },
+      listeners: {
+        'header.tap': '_onHeaderTap'
+      },
 
       // Element Lifecycle
 
@@ -119,8 +152,10 @@ Example multiple:
        * Listener to #header tap. And fire custom events.
        */
       _onHeaderTap: function(e) {
-        this.toggle();
-        this.fire('iron-accordion-header-tap');
+        if(this.expandable) {
+            this.toggle();
+            this.fire('iron-accordion-header-tap');
+        }
       },
 
       /**
@@ -138,6 +173,13 @@ Example multiple:
 
       hide: function() {
         this.$.content.hide();
+      },
+
+      /**
+       * Controls styling based on whether header is expandable
+       */
+      _isExpandable: function(expandable){
+          return expandable? 'enabled-header' : 'disabled-header';
       }
 
     });

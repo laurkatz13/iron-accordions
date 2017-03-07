@@ -1,10 +1,11 @@
 {
   "name": "iron-accordions",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "authors": [
-    "Ali Jaya Meilio Lie <alijayameilio@gmail.com>"
+    "Ali Jaya Meilio Lie <alijayameilio@gmail.com>",
+    "Lauren Katz <laurkatz@umich.edu>"
   ],
-  "description": "Version of an element providing a solution to no problem in particular.",
+  "description": "Sets up a conditionally-expandable accordion component. Original at https://github.com/alijaya/iron-accordions",
   "keywords": [
     "web-components",
     "polymer",
@@ -14,7 +15,7 @@
   ],
   "main": "iron-accordions.html",
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "http://alijaya.github.io/iron-accordions/components/iron-accordions/",
+  "homepage": "http://laurkatz13.github.io/iron-accordions/components/iron-accordions/",
   "repository": {
     "type": "git",
     "url": "git://github.com/laurkatz13/iron-accordions.git"

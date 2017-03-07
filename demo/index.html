@@ -27,6 +27,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       #nested iron-accordion[opened] h3::before {
         content: "[-] "
       }
+      #expandable .disabled-header{
+        background-color: darkblue;
+        color: white;
+      }
+      #expandable .enabled-header{
+        background-color: lightgray;
+        color: white;
+      }
+
+
     </style>
   </head>
   <body unresolved>
@@ -73,6 +83,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </iron-accordion>
         </iron-accordions>
       </iron-accordion>
+      <iron-accordions id="expandable">
+        <iron-accordion expandable>
+          <h2 header>Enabled - tap to see content</h2>
+          <p>You should get to this content</p>
+        </iron-accordion>
+        <iron-accordion expandable="false">
+          <h2 header>Disabled - tap does nothing</h2>
+          <p>You won't see this content</p>
+        </iron-accordion>
+      </iron-accordions>
     </iron-accordions>
 
   </body>

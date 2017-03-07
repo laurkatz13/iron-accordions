@@ -76,3 +76,20 @@ Bad Usage Example:
   <p>Please don't do it...</p>
 </iron-accordion>
 ```
+
+You can also 'disable' the clickable header using the expandable property.  Expandable defaults to true, so it should only be used if you need to toggle disabled/enabled rather than for normal use.
+``` html
+<iron-accordion expandable=false>
+  <h2 header>This header won't click</h2>
+  <p>So you'll never see this content</p>
+</iron-accordion>
+<iron-accordion expandable="_isExpandable(condition)">
+  <h2 header>Condition controls expandability</h2>
+  <p>So the header is only clickable if your function evaluates true </p>
+</iron-accordion>
+<script>
+_isExpandable: function(condition) {
+    return condition? true : false;
+}
+</script>
+```
