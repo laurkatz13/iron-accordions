@@ -46,6 +46,8 @@ Custom property | Description | Default
 ----------------|-------------|----------
 `--enabled-header` | Mixin applied to the header when enabled (expandable = true) | `{}`
 `--disabled-header` | Mixin applied to the header when disabled (expandable = false) | `{}`
+`--opened-header` | Mixin applied to the header when section open (opened = true) | `{}`
+`--closed-header` | Mixin applied to the header when section closed (opened = false) | `{}`
 
 @demo demo/index.html
 @hero hero.svg
@@ -80,9 +82,17 @@ Custom property | Description | Default
         overflow: hidden;
       }
 
+      #header.opened-header{
+        @apply(--opened-header);
+      }
+
+      #header.closed-header{
+        @apply(--closed-header);
+      }
+
     </style>
 
-    <div id="header" expandable$="{{expandable}}" class$="{{_isExpandable(expandable)}}">
+    <div id="header" expandable$="{{expandable}}" class$="{{_applyStyles(expandable, opened)}}">
       <content select="[header]"></content>
     </div>
     <iron-collapse id="content" opened="{{opened}}">
@@ -91,97 +101,106 @@ Custom property | Description | Default
   </template>
 
   <script>
-    Polymer({
-      is: 'iron-accordion',
+      Polymer({
+          is: 'iron-accordion',
 
-      properties: {
-          /**
-           * Set expandable to permit taps to open the collapse element. Also sets enabled-header/disabled-header class.
-           */
-          expandable: {
-              type: Boolean,
-              value: true
+          properties: {
+              /**
+               * Set expandable to permit taps to open the collapse element. Also sets enabled-header/disabled-header class.
+               */
+              expandable: {
+                  type: Boolean,
+                  value: true
+              },
+              /**
+               * Set opened to true to show the collapse element and to false to hide it.
+               *
+               * @attribute opened
+               */
+              opened: {
+                  type: Boolean,
+                  value: false,
+                  notify: true,
+                  reflectToAttribute: true
+              }
           },
-        /**
-         * Set opened to true to show the collapse element and to false to hide it.
-         *
-         * @attribute opened
-         */
-        opened: {
-         type: Boolean,
-         value: false,
-         notify: true,
-         reflectToAttribute: true
-        }
-      },
 
-      listeners: {
-        'header.tap': '_onHeaderTap'
-      },
+          listeners: {
+              'header.tap': '_onHeaderTap'
+          },
 
-      // Element Lifecycle
+          // Element Lifecycle
 
-      ready: function() {
-        // `ready` is called after all elements have been configured, but
-        // propagates bottom-up. This element's children are ready, but parents
-        // are not.
-        //
-        // This is the point where you should make modifications to the DOM (when
-        // necessary), or kick off any processes the element wants to perform.
-      },
+          ready: function() {
+              // `ready` is called after all elements have been configured, but
+              // propagates bottom-up. This element's children are ready, but parents
+              // are not.
+              //
+              // This is the point where you should make modifications to the DOM (when
+              // necessary), or kick off any processes the element wants to perform.
+          },
 
-      attached: function() {
-        // `attached` fires once the element and its parents have been inserted
-        // into a document.
-        //
-        // This is a good place to perform any work related to your element's
-        // visual state or active behavior (measuring sizes, beginning animations,
-        // loading resources, etc).
-      },
+          attached: function() {
+              // `attached` fires once the element and its parents have been inserted
+              // into a document.
+              //
+              // This is a good place to perform any work related to your element's
+              // visual state or active behavior (measuring sizes, beginning animations,
+              // loading resources, etc).
+          },
 
-      detached: function() {
-        // The analog to `attached`, `detached` fires when the element has been
-        // removed from a document.
-        //
-        // Use this to clean up anything you did in `attached`.
-      },
+          detached: function() {
+              // The analog to `attached`, `detached` fires when the element has been
+              // removed from a document.
+              //
+              // Use this to clean up anything you did in `attached`.
+          },
 
-      // Element Behavior
+          // Element Behavior
 
-      /**
-       * Listener to #header tap. And fire custom events.
-       */
-      _onHeaderTap: function(e) {
-        if(this.expandable) {
-            this.toggle();
-            this.fire('iron-accordion-header-tap');
-        }
-      },
+          /**
+           * Listener to #header tap. And fire custom events.
+           */
+          _onHeaderTap: function(e) {
+              if(this.expandable) {
+                  this.toggle();
+                  this.fire('iron-accordion-header-tap');
+              }
+          },
 
-      /**
-       * Toggle the opened state.
-       *
-       * @method toggle
-       */
-      toggle: function() {
-        this.$.content.toggle();
-      },
+          /**
+           * Toggle the opened state.
+           *
+           * @method toggle
+           */
+          toggle: function() {
+              this.$.content.toggle();
+          },
 
-      show: function() {
-        this.$.content.show();
-      },
+          show: function() {
+              this.$.content.show();
+          },
 
-      hide: function() {
-        this.$.content.hide();
-      },
+          hide: function() {
+              this.$.content.hide();
+          },
 
-      /**
-       * Controls styling based on whether header is expandable
-       */
-      _isExpandable: function(expandable){
-          return expandable? 'enabled-header' : 'disabled-header';
-      }
+          /**
+           * Controls styling based on whether header is expandable or opened
+           */
+          _applyStyles: function(expandible, opened){
+              let expand = this._isExpandable(expandible);
+              let open = this._openedHeader(opened);
+              return expand + " " + open;
+          },
+          _isExpandable: function(expandable){
+              return expandable? 'enabled-header' : 'disabled-header';
+          },
 
-    });
+          _openedHeader: function(opened){
+              return opened? 'opened-header' : 'closed-header';
+          }
+
+      });
   </script>
 </dom-module>
